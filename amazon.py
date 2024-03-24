@@ -120,7 +120,7 @@ for items in product_types:
     price_per_weight.append('Currently Unavailable')   
     
   size.append(browser.find_element(By.XPATH, '//*[@id="productOverview_feature_div"]/div/table/tbody/tr[2]/td[2]/span').text)
-
+  sleep(3)
 
 
   
