@@ -1,3 +1,4 @@
+#Some libraries are not used. Just there
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -15,7 +16,6 @@ import time
 
 browser = webdriver.Chrome()
 browser.get("https://www.amazon.com/dp/B010OVOPKA")
-
 
 #list creation to storing data
 title=[]
@@ -59,22 +59,24 @@ for items in product_types:
     sleep(3)
   
     title.append(browser.find_element(By.ID, 'productTitle').text)
-  
+    #print('title:',title)
+    
     try:
         availability_temp =(browser.find_element(By.XPATH, '//*[@id="availability"]/span').text)  
         availability.append('In stock')
     except NoSuchElementException:
         availability.append('Currently Unavailable')
-    
-    brand.append(browser.find_element(By.XPATH, '//*[@id="productOverview_feature_div"]/div/table/tbody/tr[1]/td[2]/span').text)
   
     try:
-        ships_from.append(browser.find_element(By.XPATH, '//*[@id="fulfillerInfoFeature_feature_div"]/div[2]/div/span').text)
+        ships_from.append(browser.find_element(By.XPATH,'//*[@id="sfsb_accordion_head"]/div[1]/div/span[2]').text)
     except NoSuchElementException:
         ships_from.append('Currently Unavailable')
     
+    brand.append(browser.find_element(By.XPATH, '//*[@id="productOverview_feature_div"]/div/table/tbody/tr[1]/td[2]/span').text)
+    #print('brand:',brand)
+    
     try:
-        sold_by.append(browser.find_element(By.XPATH, '//*[@id="merchantInfoFeature_feature_div"]/div[2]/div/span').text)
+        sold_by.append(browser.find_element(By.XPATH,'//*[@id="sfsb_accordion_head"]/div[2]/div/span[2]').text)
     except NoSuchElementException:
         sold_by.append('Currently Unavailable')
      
@@ -91,17 +93,15 @@ for items in product_types:
   
     sleep(3)
 
-
-
-  
-print(title)
-print(availability)
-print(brand)
-print(ships_from)
-print(sold_by)
-print(price)
-print(price_per_weight)
-print(size)
+ 
+print('title:',title)
+print('availability:',availability)
+print('brand:',brand)
+print('ships_from:',ships_from)
+print('sold_by:',sold_by)
+print('price:',price)
+print('price_per_weight:',price_per_weight)
+print('size:',size)
 
 #putting it all in the list
 data_list = [title,availability,brand,ships_from,sold_by,price,price_per_weight,size]
@@ -112,6 +112,7 @@ df = pd.DataFrame(zip(*data_list),columns = ['title','availability','brand','shi
 df.index.name = 'pro_id'
 
 #exporting in csv
+df.to_csv('product2.csv')
 df.to_csv('product.csv')
 
 df.head()
